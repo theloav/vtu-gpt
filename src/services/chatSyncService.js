@@ -225,7 +225,7 @@ class ChatSyncService {
   }
 
   // Start periodic sync (DISABLED - only manual sync now)
-  startPeriodicSync(userEmail, callback) {
+  startPeriodicSync(_userEmail, _callback) {
     // Periodic sync disabled - only manual sync available
     console.log('Periodic sync disabled. Use manual sync button.');
     return;
