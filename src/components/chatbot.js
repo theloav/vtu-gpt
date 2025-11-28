@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
@@ -510,7 +511,7 @@ const Chatbot = () => {
     <ClientOnly
       fallback={
         <div className="splash-screen">
-          <img src="/images/login-background.png" alt="VTU Logo" className="splash-logo" />
+          <Image src="/images/login-background.png" alt="VTU Logo" className="splash-logo" width={200} height={200} priority />
           <div className="splash-content">
             <div className="spinner">
               <i className="fas fa-spinner"></i>
@@ -531,7 +532,7 @@ const Chatbot = () => {
               exit={{ opacity: 0, scale: 1.2 }}
               transition={{ duration: 0.8 }}
             >
-              <img src="/images/login-background.png" alt="VTU Logo" className="splash-logo" />
+              <Image src="/images/login-background.png" alt="VTU Logo" className="splash-logo" width={200} height={200} priority />
               <div className="splash-content">
                 {isInitialLoading ? (
                   <>
@@ -625,10 +626,13 @@ const Chatbot = () => {
         >
           {/* Logo */}
           <div className="logo">
-            <img
+            <Image
               src="/images/veltech_logo(1).png"
               alt="VTU Logo"
               className="logo-img"
+              width={100}
+              height={100}
+              priority
             />
           </div>
 
