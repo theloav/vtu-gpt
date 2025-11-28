@@ -1,0 +1,72 @@
+Overall Suggestions:
+
+The IEEE papers should not exceeds 8 pages. Reduce 1 page contents from our paper. (suggestions given below )
+
+Literature Review part should increase with few more references.
+
+Avoid too many Main Topics and sub topics on all sections. Try to merge the topics with other important main topics. (Mandatory main topics: Intro, Related Works, Methodology, Results and Discussions, conclusion).
+
+Check the IEEE template for the line spaces between the paragraphs, Font Styles and other formatting aspects.
+
+
+
+
+
+
+
+In Introduction and related works sections, avoid using the subtopics. 
+
+Minimum 15 references should be included for our paper.
+
+
+
+
+
+Check the IEEE template for the line spaces between the paragraphs.
+
+
+
+
+
+Check the IEEE template for the line spaces between the paragraphs.
+
+
+
+No need to give it as separate main title for this. Either you could merge in other main sections. 
+
+
+
+
+
+Merge these two sections and reduce the contents.
+
+Bring the System Architecture into Proposed Methodology.
+
+(System Architecture will be the first sub topic in Proposed Method)
+
+
+
+
+
+
+
+
+
+Merge these two sections and reduce the contents.
+
+
+
+
+
+Specify full name of our University 
+
+
+
+Specify only Conclusion. 
+
+
+
+
+
+Important Accomplishments: should be brings under the results and discussions part. No need to specify as a separate topic, you could mentions as an outcome of each results or experiments. Then and there you discussed it.
+
