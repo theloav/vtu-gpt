@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   try {
     // Find user by email
     const result = await pool.query(
-      'SELECT id, email, password_hash, is_verified FROM users WHERE email = ?',
+      'SELECT id, email, password_hash, is_verified FROM users WHERE email = $1',
       [email]
     );
 
