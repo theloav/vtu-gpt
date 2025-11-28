@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     // Get user from database
     const result = await pool.query(
-      'SELECT id, email, is_verified FROM users WHERE id = ?',
+      'SELECT id, email, is_verified FROM users WHERE id = $1',
       [decoded.userId]
     );
 
