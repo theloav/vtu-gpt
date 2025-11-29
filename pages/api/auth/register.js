@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
   try {
     // Check if user already exists
-    const existingUser = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+    const existingUser = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
 
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ error: 'User already exists with this email' });
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     // Insert user into database
     const result = await pool.query(
       `INSERT INTO users (email, password_hash, verification_token, verification_token_expires)
-       VALUES (?, ?, ?, ?) RETURNING id, email`,
+       VALUES ($1, $2, $3, $4) RETURNING id, email`,
       [email, hashedPassword, verificationToken, verificationExpires.toISOString()]
     );
 
