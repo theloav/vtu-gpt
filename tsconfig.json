@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "lib": [
       "dom",
       "esnext"
@@ -16,8 +16,6 @@
     "noEmit": true,
     "incremental": true,
     "module": "esnext",
-    "allowArbitraryExtensions": true,
-    "moduleDetection": "force",
     "plugins": [
       {
         "name": "next"
@@ -28,8 +26,7 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "**/*.mjs"
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules"

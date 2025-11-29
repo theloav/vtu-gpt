@@ -6,11 +6,14 @@ const fs = require('fs');
 const path = require('path');
 const mammoth = require('mammoth');
 
-async function readPdf(filePath) {
-  const dataBuffer = fs.readFileSync(filePath);
-  const result = await pdf(dataBuffer);
-  return result.text;
-}
+// // Temporarily disable PDF reading due to dependency removal
+// async function readPdf(filePath) {
+//   // const dataBuffer = fs.readFileSync(filePath);
+//   // const result = await pdf(dataBuffer);
+//   // return result.text;
+//   console.warn(`PDF reading disabled for ${filePath}.`);
+//   return '';
+// }
 
 async function readDocx(filePath) {
   const buffer = fs.readFileSync(filePath);
@@ -25,7 +28,8 @@ async function run() {
 
   console.log('🔄 Reading inputs...');
   const [pdfText, docxText, mdText] = await Promise.all([
-    readPdf(pdfPath).catch(e => (console.error('PDF read error:', e.message), '')),
+    // readPdf(pdfPath).catch(e => (console.error('PDF read error:', e.message), '')),
+    Promise.resolve(''), // Replace PDF reading with an empty string
     readDocx(docxPath).catch(e => (console.error('DOCX read error:', e.message), '')),
     fs.readFileSync(mdPath, 'utf8')
   ]);
