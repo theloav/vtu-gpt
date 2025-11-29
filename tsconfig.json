@@ -16,6 +16,8 @@
     "noEmit": true,
     "incremental": true,
     "module": "esnext",
+    "allowArbitraryExtensions": true,
+    "moduleDetection": "force",
     "plugins": [
       {
         "name": "next"
@@ -26,7 +28,8 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "**/*.mjs"
   ],
   "exclude": [
     "node_modules"

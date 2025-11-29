@@ -4,7 +4,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const pdf = require('pdf-parse');
 const mammoth = require('mammoth');
 
 async function readPdf(filePath) {
@@ -87,4 +86,3 @@ async function run() {
 try { fs.mkdirSync('outputs', { recursive: true }); } catch {}
 
 run().catch(err => { console.error('❌ review-paper failed:', err); process.exit(1); });
-
