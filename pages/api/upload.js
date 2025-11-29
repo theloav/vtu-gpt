@@ -1,9 +1,11 @@
 import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
+import { PassThrough } from 'stream'; // Import PassThrough for streaming
 import { processUploadedFile, validateFile } from '../../lib/documentProcessor.mjs';
 import { generateEmbeddings } from '../../lib/openai.js';
 import { getPineconeIndex } from '../../lib/pinecone.js';
+// import { getSupabaseClient } from '../../lib/supabaseClient.js'; // Supabase client for storage if needed, not directly for temporary local storage
 
 export const config = {
   api: {
@@ -17,20 +19,16 @@ const handler = async (req, res) => {
       console.log('🔄 Starting document upload and processing...');
 
       const form = formidable({
-        uploadDir: './uploads', // Temporary directory for file processing
+        // formidable will create temp files in system's default temp dir (often /tmp on Vercel)
+        // No need for a custom uploadDir here, let it handle temporary local storage
         keepExtensions: true,
         multiples: true,
         maxFileSize: 10 * 1024 * 1024, // 10MB limit
         filename: (name, ext, part, form) => {
-          return `${Date.now()}-${part.originalFilename}`;
+          // Generate a unique filename for the temporary file in /tmp
+          return path.join(process.env.TEMP_DIR || '/tmp', `${Date.now()}-${part.originalFilename}`);
         },
       });
-
-      // Ensure upload directory exists
-      const uploadDir = './uploads';
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
 
       // Parse the form data
       form.parse(req, async (err, fields, files) => {
@@ -55,15 +53,18 @@ const handler = async (req, res) => {
           const pineconeIndex = await getPineconeIndex();
 
           for (const file of uploadedFiles) {
+            let tempFilePath = file.filepath; // Formidable automatically saves to a temp path
+
             try {
               console.log(`\n🔄 Processing: ${file.originalFilename}`);
+              console.log(`📝 Temporary file path: ${tempFilePath}`);
 
               // Validate file
               validateFile(file);
 
               // Process the file (extract text and chunk)
               const processedFile = await processUploadedFile(
-                file.filepath,
+                tempFilePath, // Use the temporary file path for processing
                 file.originalFilename,
                 {
                   uploadedBy: 'admin', // TODO: Get from auth context
@@ -99,7 +100,8 @@ const handler = async (req, res) => {
               }
 
               // Clean up temporary file
-              fs.unlinkSync(file.filepath);
+              fs.unlinkSync(tempFilePath);
+              console.log(`🗑️ Cleaned up temporary file: ${tempFilePath}`);
 
               results.push({
                 filename: file.originalFilename,
@@ -116,7 +118,8 @@ const handler = async (req, res) => {
 
               // Clean up temporary file on error
               try {
-                fs.unlinkSync(file.filepath);
+                fs.unlinkSync(tempFilePath); // Ensure cleanup even on error
+                console.log(`🗑️ Cleaned up temporary file (on error): ${tempFilePath}`);
               } catch (cleanupError) {
                 console.error('Error cleaning up file:', cleanupError);
               }
