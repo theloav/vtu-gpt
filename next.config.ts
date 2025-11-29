@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
         '@napi-rs/canvas',
         'canvas',
         'pdf-parse',
-        'pdfjs-dist',
+        // 'pdfjs-dist', // Removed to allow Next.js to bundle pdfjs-dist and its worker
       );
     }
     return config;
