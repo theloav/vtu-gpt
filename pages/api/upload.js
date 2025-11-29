@@ -24,9 +24,10 @@ const handler = async (req, res) => {
         keepExtensions: true,
         multiples: true,
         maxFileSize: 10 * 1024 * 1024, // 10MB limit
+        // Let formidable handle the temporary directory. It uses `os.tmpdir()` by default.
+        // We only provide the base filename.
         filename: (name, ext, part, form) => {
-          // Generate a unique filename for the temporary file in /tmp
-          return path.join(process.env.TEMP_DIR || '/tmp', `${Date.now()}-${part.originalFilename}`);
+          return `${Date.now()}-${part.originalFilename}`;
         },
       });
 
