@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     const result = await pool.query(
       `SELECT id, email, verification_token_expires
        FROM users
-       WHERE verification_token = ? AND is_verified = 0`,
+       WHERE verification_token = $1 AND is_verified = FALSE`,
       [token]
     );
 
@@ -35,8 +35,8 @@ export default async function handler(req, res) {
     // Update user as verified
     await pool.query(
       `UPDATE users
-       SET is_verified = 1, verification_token = null, verification_token_expires = null
-       WHERE id = ?`,
+       SET is_verified = TRUE, verification_token = null, verification_token_expires = null
+       WHERE id = $1`,
       [user.id]
     );
 
