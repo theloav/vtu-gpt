@@ -1,5 +1,5 @@
 // pages/api/auth/register.js
-import pool from '../../../lib/db.js';
+import { getDatabase } from '../../../lib/db.js';
 import { hashPassword, generateVerificationToken, isValidVeltechEmail, validatePassword } from '../../../lib/auth.js';
 import { sendVerificationEmail } from '../../../lib/email.js';
 
@@ -31,7 +31,8 @@ export default async function handler(req, res) {
 
   try {
     // Check if user already exists
-    const existingUser = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
+    const db = await getDatabase();
+    const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
 
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ error: 'User already exists with this email' });
@@ -43,7 +44,7 @@ export default async function handler(req, res) {
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     // Insert user into database
-    const result = await pool.query(
+    const result = await db.query(
       `INSERT INTO users (email, password_hash, verification_token, verification_token_expires)
        VALUES ($1, $2, $3, $4) RETURNING id, email`,
       [email, hashedPassword, verificationToken, verificationExpires.toISOString()]

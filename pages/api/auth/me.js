@@ -1,6 +1,6 @@
 // pages/api/auth/me.js
 import { verifyToken } from '../../../lib/auth.js';
-import pool from '../../../lib/db.js';
+import { getDatabase } from '../../../lib/db.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -20,7 +20,8 @@ export default async function handler(req, res) {
     }
 
     // Get user from database
-    const result = await pool.query(
+    const db = await getDatabase();
+    const result = await db.query(
       'SELECT id, email, is_verified FROM users WHERE id = $1',
       [decoded.userId]
     );

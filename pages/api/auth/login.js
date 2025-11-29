@@ -1,5 +1,5 @@
 // pages/api/auth/login.js
-import pool from '../../../lib/db.js';
+import { getDatabase } from '../../../lib/db.js';
 import { verifyPassword, generateToken, isValidVeltechEmail } from '../../../lib/auth.js';
 import { SESSION_TIMEOUT_SECONDS } from '../../../lib/config.js';
 
@@ -21,7 +21,8 @@ export default async function handler(req, res) {
 
   try {
     // Find user by email
-    const result = await pool.query(
+    const db = await getDatabase();
+    const result = await db.query(
       'SELECT id, email, password_hash, is_verified FROM users WHERE email = $1',
       [email]
     );

@@ -1,5 +1,5 @@
 // pages/api/auth/verify-email.js
-import pool from '../../../lib/db.js';
+import { getDatabase } from '../../../lib/db.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,7 +16,8 @@ export default async function handler(req, res) {
   try {
     console.log('DEBUG: Attempting to verify token:', token);
     // Find user with this verification token
-    const result = await pool.query(
+    const db = await getDatabase();
+    const result = await db.query(
       `SELECT id, email, verification_token_expires, is_verified
        FROM users
        WHERE verification_token = $1`, // Removed `AND is_verified = FALSE` to check if token exists even if already verified
@@ -43,7 +44,7 @@ export default async function handler(req, res) {
     }
 
     // Update user as verified
-    const updateResult = await pool.query(
+    const updateResult = await db.query(
       `UPDATE users
        SET is_verified = TRUE, verification_token = null, verification_token_expires = null
        WHERE id = $1`,

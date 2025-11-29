@@ -1,5 +1,5 @@
 // pages/api/auth/resend-verification.js
-import pool from '../../../lib/db.js';
+import { getDatabase } from '../../../lib/db.js';
 import { generateVerificationToken, isValidVeltechEmail } from '../../../lib/auth.js';
 import { sendVerificationEmail } from '../../../lib/email.js';
 
@@ -20,7 +20,8 @@ export default async function handler(req, res) {
 
   try {
     // Find unverified user with this email
-    const result = await pool.query(
+    const db = await getDatabase();
+    const result = await db.query(
       'SELECT id, email FROM users WHERE email = ? AND is_verified = 0',
       [email]
     );
@@ -36,7 +37,7 @@ export default async function handler(req, res) {
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
     // Update user with new verification token
-    await pool.query(
+    await db.query(
       'UPDATE users SET verification_token = ?, verification_token_expires = ? WHERE id = ?',
       [verificationToken, verificationExpires.toISOString(), user.id]
     );
